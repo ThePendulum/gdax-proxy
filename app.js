@@ -3,13 +3,12 @@
 const config = require('config');
 const util = require('util');
 const net = require('net');
-const note = require('note-log');
 const Gdax = require('gdax');
 
 const exchangeSocket = new Gdax.WebsocketClient(config.products, null, config.auth);
 
 exchangeSocket.on('open', () => {
-    note('socket', 0, 'Established connection with GDAX websocket API');
+    console.log('Established connection with GDAX websocket API');
 
     exchangeSocket.socket.send(JSON.stringify({
         type: "heartbeat",
@@ -18,15 +17,19 @@ exchangeSocket.on('open', () => {
 });
 
 exchangeSocket.on('close', () => {
-    note('socket', 0, 'Closed connection with GDAX websocket API');
+    console.log('Closed connection with GDAX websocket API');
+
+    process.exit(1);
 });
 
 exchangeSocket.on('error', error => {
-    note('socket', 2, error);
+    console.log(error);
+
+    process.exit(1);
 });
 
 const server = net.createServer(client => {
-    note('server', 0, 'Client \'' + client.remoteAddress + '\' connected');
+    console.log('Client \'' + client.remoteAddress + '\' connected');
 
     exchangeSocket.on('message', msg => {
         if(client.writable) {
@@ -35,16 +38,18 @@ const server = net.createServer(client => {
     });
 
     client.on('end', () => {
-        note('server', 0, 'Client \'' + client.remoteAddress + '\' disconnected');
+        console.log('Client \'' + client.remoteAddress + '\' disconnected');
     });
 });
 
 server.on('error', error => {
-    note('server', 2, error);
+    console.log(error);
+
+    process.exit(1);
 });
 
 server.listen(config.port, config.host, () => {
     const address = server.address();
 
-    note('server', 0, 'Server listening at \'' + address.address + ':' + address.port + '\'');
+    console.log('Server listening at \'' + address.address + ':' + address.port + '\'');
 });

@@ -15,12 +15,26 @@ exchangeSocket.on('open', () => {
     }));
 });
 
-const server = net.createServer(socket => {
+const server = net.createServer(client => {
+    note('server', 0, 'Client \'' + client.remoteAddress + '\' connected');
+
     exchangeSocket.on('message', msg => {
-        if(socket.writable) {
-            socket.write(JSON.stringify(msg));
+        if(client.writable) {
+            client.write(JSON.stringify(msg));
         }
+    });
+
+    client.on('end', () => {
+        note('server', 0, 'Client \'' + client.remoteAddress + '\' disconnected');
     });
 });
 
-server.listen(config.port, config.host);
+server.on('error', error => {
+    note('server', 2, error);
+});
+
+server.listen(config.port, config.host, () => {
+    const address = server.address();
+
+    note('server', 0, 'Server listening at \'' + address.address + ':' + address.port + '\'');
+});

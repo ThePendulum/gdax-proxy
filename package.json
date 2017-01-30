@@ -1,6 +1,6 @@
 {
   "name": "gdax-proxy",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Proxies the GDAX API into raw TCP messages",
   "main": "app.js",
   "scripts": {

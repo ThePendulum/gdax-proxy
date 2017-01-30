@@ -1,0 +1,25 @@
+{
+  "name": "gdax-proxy",
+  "version": "1.0.0",
+  "description": "Proxies the GDAX API into raw TCP messages",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ThePendulum/gdax-proxy"
+  },
+  "keywords": [
+    "gdax",
+    "coinbase"
+  ],
+  "author": "Niels Simenon",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/Kagammor/gdax-proxy#readme",
+  "dependencies": {
+    "config": "^1.24.0",
+    "gdax": "^0.3.1",
+    "note-log": "^2.1.11"
+  }
+}
